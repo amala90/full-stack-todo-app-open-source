@@ -1,0 +1,161 @@
+<div class="task-list container mt-5">
+    <mat-card class="task-list-card shadow-lg p-4">
+        <!-- ----------------------------------------------------------------------- -->
+        <!--                             Header Section                              -->
+        <!-- ----------------------------------------------------------------------- -->
+        <header class="task-list-header">
+            <div class="task-list-title">
+                <h4 class="title">Mes tâches</h4>
+                <div class="subtitle">Organisez, suivez et terminez vos tâches</div>
+            </div>
+            <div class="task-meta">
+                <div class="task-count-badge px-3">
+                    <mat-icon class="badge-icon">list_alt</mat-icon>
+                    <span class="badge-text">{{ tasks.length }} tâche{{ tasks.length > 1 ? 's' : '' }}</span>
+                </div>
+                <!-- Desktop mode -->
+                <span class="d-md-inline-block">
+                    <button matButton="elevated" class="" (click)="createTask()" matTooltip="Créer une nouvelle tâche" matTooltipPosition="above">
+                        <mat-icon class="me-1">add</mat-icon>
+                        Créer une nouvelle tâche
+                    </button>
+                </span>
+                <!-- Mobile mode -->
+                <span class="d-md-none">
+                    <button matMiniFab class="" (click)="createTask()" matTooltip="Créer une nouvelle tâche" matTooltipPosition="above">
+                        <mat-icon>add</mat-icon>                        
+                    </button>
+                </span>
+            </div>
+        </header>
+
+        <!-- ----------------------------------------------------------------------- -->
+        <!--                              Tasks Section                              -->
+        <!-- ----------------------------------------------------------------------- -->
+        <section class="task-items-container">
+            <!-- No task message -->
+            <div *ngIf="tasks.length === 0" class="empty-state">
+                <mat-icon class="empty-icon">inbox</mat-icon>
+                <div class="empty-text">Aucune tâche disponible. Veuillez en ajouter une nouvelle.</div>
+            </div>
+
+            <!-- Task list -->
+            <div *ngIf="tasks.length > 0" class="tasks">
+                <div *ngFor="let task of pagedTasks" class="task-item"
+                    [ngClass]="{'completed': task.status === TaskStatus.Completed}">
+                    <!-- ----------------------------------------------------------------------- -->
+                    <!--          Task Status, Description, Assigned User, Created Date          -->
+                    <!-- ----------------------------------------------------------------------- -->
+                    <div class="task-left" role="button" [routerLink]="['/tasks/details', task.id]">
+                        <div class="status-icon" [ngSwitch]="task.status">
+                            <div *ngSwitchCase="TaskStatus.Pending" class="pending-status-icon-container" matTooltip="Tâche en attente" matTooltipPosition="above">
+                                <mat-icon>radio_button_unchecked</mat-icon>
+                            </div>
+                            <div *ngSwitchCase="TaskStatus.InProgress" class="in-progress-status-icon-container" matTooltip="Tâche en cours" matTooltipPosition="above">
+                                <mat-icon>schedule</mat-icon>
+                            </div>
+                            <div *ngSwitchCase="TaskStatus.Completed" class="completed-status-icon-container" matTooltip="Tâche terminée" matTooltipPosition="above">
+                                <mat-icon>check_circle</mat-icon>
+                            </div>
+                        </div>
+                        <div class="task-info">
+                            <div class="task-title"  [ngClass]="{'completed': task.status === TaskStatus.Completed}">{{ task.title }}</div>
+                            <div class="task-meta-line">
+                                <span class="muted">
+                                    <span class="d-md-inline-block">
+                                        Assigné à : 
+                                    </span>
+                                    {{ task.assignedUser }}
+                                </span>
+                                <span class="muted">•</span>
+                                <span class="muted">
+                                    <span class="d-md-inline-block">
+                                        Créé le : 
+                                    </span>
+                                    {{ task.createdDate | date }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                    <div class="task-right">
+                        <!-- ----------------------------------------------------------------------- -->
+                        <!--                          Status Change Button                           -->
+                        <!-- ----------------------------------------------------------------------- -->
+                        <button matButton="elevated" [matMenuTriggerFor]="statusMenu" class="status-menu-btn d-md-flex" matTooltip="Changer le statut" matTooltipPosition="above">
+                            <mat-icon *ngIf="task.status === TaskStatus.Pending">radio_button_unchecked</mat-icon>
+                            <mat-icon *ngIf="task.status === TaskStatus.InProgress">schedule</mat-icon>
+                            <mat-icon *ngIf="task.status === TaskStatus.Completed">check_circle</mat-icon>
+                            <span class="status-label">
+                                {{ task.status === TaskStatus.Pending ? 'À faire' : (task.status === TaskStatus.InProgress ? 'En cours' : 'Complété') }}
+                            </span>
+                            <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+                        </button>
+                        <mat-menu #statusMenu="matMenu">
+                            <button  mat-menu-item (click)="changeStatus(task, TaskStatus.Pending)">
+                                <mat-icon>radio_button_unchecked</mat-icon>
+                                <span>À faire</span>
+                            </button>
+                            <button mat-menu-item (click)="changeStatus(task, TaskStatus.InProgress)">
+                                <mat-icon>schedule</mat-icon>
+                                <span>En cours</span>
+                            </button>
+                            <button mat-menu-item (click)="changeStatus(task, TaskStatus.Completed)">
+                                <mat-icon>check_circle</mat-icon>
+                                <span>Complété</span>
+                            </button>
+                        </mat-menu>
+
+                        <!-- ----------------------------------------------------------------------- -->
+                        <!--                              Task Actions                               -->
+                        <!-- ----------------------------------------------------------------------- -->
+                        <!-- Responsive action buttons: menu on mobile, buttons on desktop -->
+                         <!-- Buttons (Desktop) -->
+                        <div class="task-actions d-none d-md-flex" role="group">
+                            <button matMiniFab (click)="editTask(task.id)" class="action-btn edit"
+                                aria-label="Modifier la tâche" matTooltip="Modifier la tâche" matTooltipPosition="above">
+                                <mat-icon fontIcon="edit" class="action-icon"></mat-icon>
+                            </button>
+                            <button matMiniFab (click)="detailsTask(task.id)" class="action-btn details"
+                                aria-label="Détails de la tâche" matTooltip="Détails de la tâche" matTooltipPosition="above">
+                                <mat-icon fontIcon="info" class="action-icon"></mat-icon>
+                            </button>
+                            <button matMiniFab (click)="deleteTask(task.id)" class="action-btn delete"
+                                aria-label="Supprimer la tâche" matTooltip="Supprimer la tâche" matTooltipPosition="above">
+                                <mat-icon fontIcon="delete" class="action-icon"></mat-icon>
+                            </button>
+                        </div>
+                        <!-- Responsive action menu: buttons on desktop, menu on mobile -->
+                         <!-- Menu (Mobile) -->
+                        <div class="task-actions d-flex d-md-none">
+                            <button mat-icon-button [matMenuTriggerFor]="actionMenu" aria-label="Actions">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #actionMenu="matMenu">
+                                <button mat-menu-item (click)="editTask(task.id)">
+                                    <mat-icon fontIcon="edit"></mat-icon>
+                                    <span>Modifier</span>
+                                </button>
+                                <button mat-menu-item (click)="detailsTask(task.id)">
+                                    <mat-icon fontIcon="info"></mat-icon>
+                                    <span>Détails</span>
+                                </button>
+                                <button mat-menu-item (click)="deleteTask(task.id)">
+                                    <mat-icon fontIcon="delete"></mat-icon>
+                                    <span>Supprimer</span>
+                                </button>
+                            </mat-menu>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ----------------------------------------------------------------------- -->
+                <!--                              Pagination                                 -->
+                <!-- ----------------------------------------------------------------------- -->
+                <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+                    [pageSizeOptions]="[5, 10, 20]" (page)="onPageChange($event)"></mat-paginator>
+            </div>
+        </section>
+    </mat-card>
+</div>

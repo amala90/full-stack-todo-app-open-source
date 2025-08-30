@@ -1,0 +1,10 @@
+.create-task-container{
+    background-color: white !important;
+}
+
+.title{
+    margin: 0;
+    color: var(--accent);
+    font-size: 1.25rem;
+    font-weight: 600;
+}

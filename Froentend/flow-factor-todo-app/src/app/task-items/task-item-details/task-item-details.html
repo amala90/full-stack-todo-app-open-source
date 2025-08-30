@@ -1,0 +1,118 @@
+<div class="container mt-4">
+  <mat-card class="elevation-3 task-card">
+    <div class="header d-flex align-items-center mb-3 flex-wrap">
+      <div class="d-flex align-items-center me-auto mb-1">
+        <div class="header-avatar" aria-hidden="true">
+          <mat-icon class="header-icon">task_alt</mat-icon>
+        </div>
+        <div class="header-text">
+          <div class="title">Détails de la tâche</div>
+          <div class="subtitle">Aperçu et métadonnées</div>
+        </div>
+      </div>
+
+      <div *ngIf="task" class="d-flex align-items-center gap-2">
+        <div class="d-flex gap-2" role="group">
+          <!-- Edit Task -->
+          <button matMiniFab (click)="editTask(task.id)" aria-label="Modifier la tâche">
+            <mat-icon fontIcon="edit" class="action-icon"></mat-icon>
+          </button>
+
+          <!-- Delete Task -->
+          <button matMiniFab (click)="deleteTask(task.id)" class="delete-task-button " aria-label="Supprimer la tâche">
+            <mat-icon fontIcon="delete" class="action-icon"></mat-icon>
+          </button>
+        </div>
+
+        <!-- ----------------------------------------------------------------------- -->
+        <!--                          Status Change Button                           -->
+        <!-- ----------------------------------------------------------------------- -->
+        <button matButton="elevated" [matMenuTriggerFor]="statusMenu" class="status-menu-btn">
+          <mat-icon *ngIf="task.status === TaskStatus.Pending">radio_button_unchecked</mat-icon>
+          <mat-icon *ngIf="task.status === TaskStatus.InProgress">schedule</mat-icon>
+          <mat-icon *ngIf="task.status === TaskStatus.Completed">check_circle</mat-icon>
+          <span class="status-label">
+            {{ task.status === TaskStatus.Pending ? 'À faire' : (task.status === TaskStatus.InProgress ? 'En cours' :
+            'Complété') }}
+          </span>
+          <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #statusMenu="matMenu">
+          <button mat-menu-item (click)="changeStatus(TaskStatus.Pending)">
+            <mat-icon>radio_button_unchecked</mat-icon>
+            <span>À faire</span>
+          </button>
+          <button mat-menu-item (click)="changeStatus(TaskStatus.InProgress)">
+            <mat-icon>schedule</mat-icon>
+            <span>En cours</span>
+          </button>
+          <button mat-menu-item (click)="changeStatus(TaskStatus.Completed)">
+            <mat-icon>check_circle</mat-icon>
+            <span>Complété</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div *ngIf="loading" class="text-center py-5">
+      <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+      <p class="loading-text">Chargement des détails de la tâche…</p>
+    </div>
+
+    <div *ngIf="!loading && task" class="details">
+      <div class="detail-row">
+        <mat-icon class="icon primary">title</mat-icon>
+        <div>
+          <div class="field-label">Titre</div>
+          <div class="field-value">{{ task.title }}</div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="detail-row">
+        <mat-icon class="icon accent">description</mat-icon>
+        <div>
+          <div class="field-label">Description</div>
+          <div class="field-value prewrap">{{ task.description }}</div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="detail-row wrap">
+        <div class="inline-field">
+          <mat-icon class="icon primary">person</mat-icon>
+          <div>
+            <div class="field-label">Assigné à</div>
+            <div class="field-value">{{ task.assignedUser || 'Non assigné' }}</div>
+          </div>
+        </div>
+
+        <div class="inline-field created">
+          <mat-icon class="icon accent">event</mat-icon>
+          <div>
+            <div class="field-label">Créé le</div>
+            <div class="field-value">{{ task.createdDate | date:'medium' }}</div>
+          </div>
+        </div>
+      </div>
+      <hr/>
+      <div class="d-flex action-row">
+        <button mat-stroked-button color="primary" (click)="goBack()" aria-label="Retour à la liste des tâches">
+          <mat-icon class="btn-icon">arrow_back</mat-icon>
+          Retour
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && !task" class="text-center py-5">
+      <p class="not-found">Tâche non trouvée.</p>
+      <div class="d-flex justify-content-center">
+        <button mat-stroked-button color="primary" (click)="goBack()">Retour à la liste</button>
+      </div>
+    </div>
+  </mat-card>
+</div>

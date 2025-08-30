@@ -1,0 +1,20 @@
+<mat-toolbar color="primary" class="app-toolbar">
+    <div class="container d-flex align-items-center justify-content-space-between">
+	<h2 class="app-title">
+        Gestionnaire de tâches
+    </h2>
+	<a routerLink="/tasks" class="ms-2 menu-item">Tâches</a>
+
+	<span class="spacer"></span>
+	<button mat-button [matMenuTriggerFor]="userMenu">
+        Utilisateur
+        <mat-icon iconPositionEnd class="ms-1">arrow_drop_down</mat-icon>
+    </button>
+	<mat-menu #userMenu="matMenu">
+		<button mat-menu-item>Profil</button>
+		<button mat-menu-item>Se déconnecter</button>
+	</mat-menu>
+    </div>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

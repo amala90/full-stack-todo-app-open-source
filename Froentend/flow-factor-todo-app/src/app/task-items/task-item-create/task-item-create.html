@@ -1,0 +1,79 @@
+<div class="container d-flex justify-content-center align-items-center mt-5">
+  <mat-card class="create-task-container p-4 shadow-lg w-100">
+    <div class="d-flex align-items-center mb-4">
+      <mat-icon color="primary" class="me-2">add_task</mat-icon>
+      <h4 class="title">Créer une tâche</h4>
+    </div>
+    
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" autocomplete="off" class="mt-2">
+      <!-- Title -->
+      <section class="mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Titre</mat-label>
+          <mat-icon matPrefix>title</mat-icon>
+          <input matInput formControlName="title" placeholder="Entrez le titre de la tâche" />
+          <mat-error *ngIf="taskForm.get('title')?.hasError('required')">
+            Le titre est requis
+          </mat-error>
+        </mat-form-field>
+      </section>
+
+      <!-- Description -->
+      <section class="mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Description</mat-label>
+          <mat-icon matPrefix>view_headline</mat-icon>
+          <textarea matInput rows="3" formControlName="description"
+            placeholder="Entrez la description de la tâche"></textarea>
+          <mat-error *ngIf="taskForm.get('description')?.hasError('required')">
+            La description est requise
+          </mat-error>
+        </mat-form-field>
+      </section>
+
+      <section class="row g-2 mb-3">
+        <!-- Status -->
+        <div class="col-12 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Statut</mat-label>
+            <mat-icon matPrefix>search_activity</mat-icon>
+            <mat-select formControlName="status">
+              <mat-option [value]="TaskStatus.Pending">À faire</mat-option>
+              <mat-option [value]="TaskStatus.InProgress">En cours</mat-option>
+              <mat-option [value]="TaskStatus.Completed">Complété</mat-option>
+            </mat-select>
+            <mat-error *ngIf="taskForm.get('status')?.hasError('required')">
+              Le statut est requis
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- User -->
+        <div class="col-12 col-md-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Utilisateur assigné</mat-label>
+            <mat-icon matPrefix>person</mat-icon>
+            <input matInput formControlName="assignedUser" placeholder="Nom de l'utilisateur" [matAutocomplete]="auto"/>
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+              <ng-container *ngFor="let option of filteredOptions | async">
+                <mat-option [value]="option">{{option}}</mat-option>
+              </ng-container>
+            </mat-autocomplete>
+            <mat-error *ngIf="taskForm.get('assignedUser')?.hasError('required')">
+              Le nom de l'utilisateur est requis
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </section>
+
+      <!-- Submit button -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <button mat-stroked-button color="primary" type="button" (click)="goBack()">
+          <mat-icon class="me-1">arrow_back</mat-icon> Annuler
+        </button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="taskForm.invalid" class="fw-bold px-4">
+          <mat-icon class="me-1">check_circle</mat-icon> Créer
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

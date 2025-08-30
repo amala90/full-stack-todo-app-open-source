@@ -1,0 +1,6 @@
+@FlowFactor.ToDo.API_HostAddress = http://localhost:5248
+
+GET {{FlowFactor.ToDo.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

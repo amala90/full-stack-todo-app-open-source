@@ -93,7 +93,7 @@ The frontend is an **Angular** application that communicates with the backend AP
 
 * Angular
 * RxJS
-* Angular Material (optional if used)
+* Angular Material
 
 ---
 

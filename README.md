@@ -28,9 +28,9 @@ The backend is built using **ASP.NET Core** with **Entity Framework Core** for d
 
 ### Getting Started
 1. Navigate to the backend folder:
-   ```bash
+```bash
    cd Backend/FlowFactor.ToDo.API
-````
+```
 
 2. Restore dependencies:
 

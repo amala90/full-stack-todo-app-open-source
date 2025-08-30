@@ -30,7 +30,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularDev",
         policy => policy
-            .WithOrigins("http://localhost:4200") // Angular dev server URL
+            .WithOrigins("http://localhost:4200", "https://ay-todo-app.azurewebsites.net") // Angular dev server URL
             .AllowAnyHeader()
             .AllowAnyMethod());
 });

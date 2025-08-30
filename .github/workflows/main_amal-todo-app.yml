@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: Frontend/flow-factor-todo-app/dist/flow-factor-todo-app
 
   deploy:
     runs-on: ubuntu-latest

@@ -33,8 +33,12 @@
         <!--                              Tasks Section                              -->
         <!-- ----------------------------------------------------------------------- -->
         <section class="task-items-container">
+            <div *ngIf="isLoading" class="d-flex align-items-center gap-2 mb-1">
+                <mat-progress-spinner mode="indeterminate" diameter="25" strokeWidth="4"></mat-progress-spinner>
+                <div class="loading-text">Chargement des tâches...</div>
+            </div>
             <!-- No task message -->
-            <div *ngIf="tasks.length === 0" class="empty-state">
+            <div *ngIf="tasks.length === 0 && !isLoading" class="empty-state">
                 <mat-icon class="empty-icon">inbox</mat-icon>
                 <div class="empty-text">Aucune tâche disponible. Veuillez en ajouter une nouvelle.</div>
             </div>
@@ -67,9 +71,9 @@
                                     </span>
                                     {{ task.assignedUser }}
                                 </span>
-                                <span class="muted">•</span>
-                                <span class="muted">
-                                    <span class="d-md-inline-block">
+                                <span class="muted d-md-inline-block">•</span>
+                                <span class="muted d-md-inline-block">
+                                    <span>
                                         Créé le : 
                                     </span>
                                     {{ task.createdDate | date }}

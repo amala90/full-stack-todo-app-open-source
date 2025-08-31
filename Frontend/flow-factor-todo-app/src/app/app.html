@@ -1,20 +1,35 @@
 <mat-toolbar color="primary" class="app-toolbar">
-    <div class="container d-flex align-items-center justify-content-space-between">
-	<h2 class="app-title">
-        Gestionnaire de tâches
-    </h2>
-	<a routerLink="/tasks" class="ms-2 menu-item">Tâches</a>
+	<div class="container p-0 d-flex align-items-center justify-content-space-between">
+		<!-- App title -->
+		<h2 class="app-title">
+			<span class="line-height-1">
+				Gestionnaire de tâches
+			</span>
+			<small class="d-block text-muted line-height-1 text-sm">
+				Developpé par
+				<a href="https://www.linkedin.com/in/amal-yousfi-m-sc-a-84b901168/" target="_blank"
+					class="text-decoration-none profile-link">
+					Amal Yousfi
+				</a>
+			</small>
+		</h2>
+		<!-- Main navigation -->
+		<a routerLink="/tasks" class="ms-2 me-1 menu-item d-flex align-items-center">
+			<mat-icon class="me-1">task_alt</mat-icon>
+			Tâches
+		</a>
 
-	<span class="spacer"></span>
-	<button mat-button [matMenuTriggerFor]="userMenu">
-        Utilisateur
-        <mat-icon iconPositionEnd class="ms-1">arrow_drop_down</mat-icon>
-    </button>
-	<mat-menu #userMenu="matMenu">
-		<button mat-menu-item>Profil</button>
-		<button mat-menu-item>Se déconnecter</button>
-	</mat-menu>
-    </div>
+		<span class="spacer"></span>
+		<!-- Account menu -->
+		<button mat-button [matMenuTriggerFor]="userMenu">
+			Compte
+			<mat-icon iconPositionEnd class="ms-1">arrow_drop_down</mat-icon>
+		</button>
+		<mat-menu #userMenu="matMenu">
+			<button mat-menu-item disabled>Profil</button>
+			<button mat-menu-item disabled>Se déconnecter</button>
+		</mat-menu>
+	</div>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

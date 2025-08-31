@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-task-item-list',
@@ -34,7 +35,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatSelectModule,
     MatMenuModule, 
     RouterModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './task-item-list.html',
   styleUrls: ['./task-item-list.css']
@@ -52,6 +54,9 @@ export class TaskItemList implements OnInit {
   pageIndex = 0;
   length = 0;
 
+  /** Loading state */
+  isLoading = false;
+
   constructor(
     private taskService: TaskItemService, 
     private router: Router,
@@ -66,15 +71,25 @@ export class TaskItemList implements OnInit {
    * Loads all tasks from the server.
    */
   loadTasks(): void {
+    this.isLoading = true;
     // Fetch all tasks from the service
     this.taskService.getAllTaskItems().subscribe({
       next: (data) => {
+        // Update tasks
         this.tasks = data;
+        // Update paginator length
         this.length = data.length;
         // Update tasks and paginator length
         this.updatePagedTasks();
+        // Stop the loading indicator
+        this.isLoading = false;
       },
-      error: (err) => console.error('Error loading tasks:', err)
+      error: (err) =>{
+        // Stop loading indicator
+        this.isLoading = false;
+        // Show error message
+        console.error('Error loading tasks:', err);
+      }
     });
   }
 

@@ -19,13 +19,23 @@
 }
 
 .menu-item{
-    color: inherit;
+    color: #007ddc;
     text-decoration: none;
-    font-size: 1rem;
-    padding: 10px 16px;
+    font-size: 0.85rem;
+    padding: 5px 8px;
+    border-radius: 5px;    
+    background: rgb(91 182 255 / 21%);
+    font-weight: 500;
 }
 
-.menu-item:hover{
-    background: rgba(0,0,0,0.1);
+.line-height-1 {
+    line-height: 1;
 }
 
+.text-sm{
+    font-size: 0.80rem;
+}
+
+.profile-link{
+    color: rgb(18 124 215);
+}
